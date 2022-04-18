@@ -1,0 +1,59 @@
+
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+
+#define buttonPin1 3
+#define buttonPin2 4
+
+int buttonState1 = 0;
+int buttonState2 = 0;
+
+RF24 radio(9,8); //CE, CSN
+const byte address[6] = "00002";
+// any five letter stream
+//this is the pipe that the 2 electronics talk through
+
+
+void setup() {
+
+  pinMode (buttonPin1, INPUT_PULLUP);
+  pinMode (buttonPin2, INPUT_PULLUP);
+  Serial.begin (9600) ;
+  radio.begin(); //starts the operation of the chip
+  radio.openWritingPipe(address); //opens pipe to begin talking
+  radio.setPALevel(RF24_PA_LOW); //has 4 power levels for power amplifier
+  //min,low,med, high
+  radio.stopListening(); //stops listening to incoming information
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  buttonState1 = digitalRead(buttonPin1);
+  buttonState2 = digitalRead(buttonPin2);
+
+  if(buttonState1 == 1){
+      buttonState1 = 1;
+    }
+  if(buttonState1 == 0){
+      buttonState1 == 0;
+    }
+
+  if(buttonState2 == 1){
+      buttonState2 = 3;
+    }
+  if(buttonState2 == 0){
+      buttonState2 = 2;
+    }
+
+   Serial.println(buttonState1);
+   Serial.print("\t");
+   Serial.println(buttonState2);
+   Serial.print("\n");  
+   radio.write(&buttonState1,sizeof(buttonState1)); 
+   // the & sign indicates what variable is meant to be sent to the reciver
+   //returns the buttonState1 size in bytes
+   radio.write(&buttonState1,sizeof(buttonState2));
+   
+}
