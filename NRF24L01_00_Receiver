@@ -1,0 +1,55 @@
+#include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+
+#define led1 A0
+#define led2 A1
+
+int buttonState = 0;
+
+
+
+RF24 radio(9,8); //CE, CSN identifies where on arduino are these pins located
+const byte address[6] = "00002";
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+
+  radio.begin(); //begin operation on chip
+  radio.openReadingPipe(0,address); //open the pipe to begin reading through this pipe only
+  radio.setPALevel(RF24_PA_LOW); // sets different power amplifier levels can be MIN,LOW,MED, and HIGH
+}
+
+void loop() {
+
+  radio.startListening(); //start listening for information coming through the pipe
+  while(!radio.available()); //while there are no bytes ready to send do nothing
+  radio.read(&buttonState, sizeof(buttonState)); //checks the button's size in bytes and it's contents
+  Serial.println(buttonState);
+
+  if (buttonState == 0)
+  {
+    digitalWrite(led1, HIGH);
+  } 
+
+    if (buttonState == 1)
+  {
+    digitalWrite(led1, LOW);
+  } 
+
+    if (buttonState == 2)
+  {
+    digitalWrite(led1, HIGH);
+  } 
+
+    if (buttonState == 3)
+  {
+    digitalWrite(led1, LOW);
+  } 
+
+}
