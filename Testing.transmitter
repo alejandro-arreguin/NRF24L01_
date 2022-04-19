@@ -2,21 +2,18 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
-RF24 radio(7,8);
+RF24 radio(7,8); //CE,CSN pins
 
-const byte address[6] = "00001";
+const byte address[6] = "00001"; //pipe address
 
 void setup() {
-  // put your setup code here, to run once:
   radio.begin();
-  radio.openWritingPipe(address);
-  radio.setPALevel(RF24_PA_MAX);
+  radio.openWritingPipe(address); //opens pipe
+  radio.setPALevel(RF24_PA_MAX); //sets power level for module
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   const char text[] = "Hello World";
-  radio.write(&text, sizeof(text));
+  radio.write(&text, sizeof(text)); //sends our text to the reciever every 1 second
   delay(1000);
-
 }
