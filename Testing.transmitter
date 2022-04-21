@@ -10,7 +10,7 @@ void setup() {
   radio.begin();
   radio.openWritingPipe(address); //opens pipe
   radio.setPALevel(RF24_PA_MAX); //sets power level for module
-  radio.stopListening();
+  radio.stopListening(); //sets the module as a transmitter
 }
 
 void loop() {
