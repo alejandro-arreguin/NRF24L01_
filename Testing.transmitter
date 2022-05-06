@@ -1,19 +1,20 @@
+#include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
 
-RF24 radio(7,8); //CE,CSN pins
+RF24 radio(7, 8); // CE, CSN
 
-const byte address[6] = "00001"; //pipe address
+const byte address[6] = "00001";
 
 void setup() {
   radio.begin();
-  radio.openWritingPipe(address); //opens pipe
-  radio.setPALevel(RF24_PA_MAX); //sets power level for module
-  radio.stopListening(); //sets the module as a transmitter
+  radio.openWritingPipe(address);
+  radio.setPALevel(RF24_PA_MIN);
+  radio.stopListening();
 }
 
 void loop() {
   const char text[] = "Hello World";
-  radio.write(&text, sizeof(text)); //sends our text to the reciever every 1 second
+  radio.write(&text, sizeof(text));
   delay(1000);
 }
