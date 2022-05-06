@@ -1,22 +1,22 @@
-//Libraries
+
+#include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
 
-RF24 radio(7,8); //CE, CSN pins
+RF24 radio(7, 8); // CE, CSN
 
-const byte address[6] = "00001"; //our pipe which will allow modules to connect
+const byte address[5] = "00001";
 
 void setup() {
   Serial.begin(9600);
-  radio.begin(); //starts the communication
-  
-  radio.openWritingPipe(address); //opens pipe
-  radio.setPALevel(RF24_PA_MAX); //sets power level for module
+  radio.begin();
+  radio.openReadingPipe(0, address);
+  radio.setPALevel(RF24_PA_MIN);
+  radio.startListening();
 }
 
 void loop() {
-  if(!radio.available()) //while there are no bytes avaialable to read
-  {
+  if (radio.available()) {
     char text[32] = "";
     radio.read(&text, sizeof(text));
     Serial.println(text);
